@@ -1,0 +1,948 @@
+{
+  "openapi" : "3.0.0",
+  "servers" : [ {
+    "description" : "h111",
+    "url" : "https://virtserver.swaggerhub.com/iotnation_datateam/iotnation_api/1.0.1"
+  } ],
+  "info" : {
+    "version" : "1.0.1",
+    "title" : "IoT Nation Database",
+    "description" : "API to return gridview data of iotdb\n"
+  },
+  "tags" : [ {
+    "name" : "Done",
+    "description" : "finished"
+  }, {
+    "name" : "filter",
+    "description" : "filter for grid view"
+  } ],
+  "security" : [ {
+    "ApiKeyAuth" : [ ]
+  }, {
+    "OAuth2" : [ "read" ]
+  } ],
+  "paths" : {
+    "/companies/home" : {
+      "get" : {
+        "summary" : "Get home page data",
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "body" : {
+                      "type" : "object",
+                      "properties" : {
+                        "data" : {
+                          "type" : "object",
+                          "properties" : {
+                            "aggNums" : {
+                              "type" : "array",
+                              "items" : {
+                                "type" : "object",
+                                "properties" : {
+                                  "type" : {
+                                    "type" : "string",
+                                    "example" : "companies"
+                                  },
+                                  "count" : {
+                                    "type" : "integer",
+                                    "example" : 500
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid status value"
+          }
+        }
+      }
+    },
+    "/companies/gridView" : {
+      "post" : {
+        "summary" : "use payload to send query",
+        "requestBody" : {
+          "description" : "queries to be sent",
+          "required" : true,
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "search" : {
+                    "$ref" : "#/components/schemas/search"
+                  },
+                  "filters" : {
+                    "type" : "array",
+                    "items" : {
+                      "$ref" : "#/components/schemas/filter"
+                    }
+                  },
+                  "sort" : {
+                    "$ref" : "#/components/schemas/sort"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "body" : {
+                      "type" : "object",
+                      "properties" : {
+                        "data" : {
+                          "$ref" : "#/components/schemas/gridViewData"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/companies/gridView" : {
+      "post" : {
+        "summary" : "use payload to send query",
+        "security" : [ {
+          "oAuth2" : [ "read" ]
+        } ],
+        "requestBody" : {
+          "description" : "queries to be sent",
+          "required" : true,
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object",
+                "properties" : {
+                  "search" : {
+                    "$ref" : "#/components/schemas/search"
+                  },
+                  "filters" : {
+                    "type" : "array",
+                    "items" : {
+                      "$ref" : "#/components/schemas/filter"
+                    }
+                  },
+                  "sort" : {
+                    "$ref" : "#/components/schemas/sort"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "body" : {
+                      "type" : "object",
+                      "properties" : {
+                        "data" : {
+                          "$ref" : "#/components/schemas/gridViewData"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized/Token Expired",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "message" : {
+                      "type" : "string",
+                      "enum" : [ "Unauthorized", "The incoming token has expired" ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/companies/{companyId}" : {
+      "get" : {
+        "summary" : "Get the company full information by company name",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "companyId",
+          "schema" : {
+            "type" : "string"
+          },
+          "required" : true,
+          "description" : "id of company not"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "body" : {
+                      "type" : "object",
+                      "properties" : {
+                        "data" : {
+                          "$ref" : "#/components/schemas/advancedInfo"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/companies/{companyId}" : {
+      "get" : {
+        "summary" : "Get the company full information by company name",
+        "security" : [ {
+          "oAuth2" : [ "read" ]
+        } ],
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "companyId",
+          "schema" : {
+            "type" : "string"
+          },
+          "required" : true,
+          "description" : "id of company not"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "body" : {
+                      "type" : "object",
+                      "properties" : {
+                        "data" : {
+                          "$ref" : "#/components/schemas/advancedInfo"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized/Token Expired",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "message" : {
+                      "type" : "string",
+                      "enum" : [ "Unauthorized", "The incoming token has expired" ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/landingPages/{pageName}" : {
+      "post" : {
+        "summary" : "Landing page data",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "pageName",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "example" : "silicon_valley_iot"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "companyLeadboad" : {
+                      "type" : "object",
+                      "properties" : {
+                        "companies" : {
+                          "type" : "array",
+                          "items" : {
+                            "$ref" : "#/components/schemas/basicInfo"
+                          }
+                        }
+                      }
+                    },
+                    "marketTrendGraphic" : {
+                      "type" : "string",
+                      "example" : "https://url_to_graphic.jpg"
+                    },
+                    "events" : {
+                      "type" : "array",
+                      "items" : {
+                        "$ref" : "#/components/schemas/article"
+                      }
+                    },
+                    "useCases" : {
+                      "type" : "array",
+                      "items" : {
+                        "$ref" : "#/components/schemas/useCase"
+                      }
+                    },
+                    "reports" : {
+                      "type" : "array",
+                      "items" : {
+                        "$ref" : "#/components/schemas/article"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "arrayOfYears" : {
+        "type" : "integer",
+        "enum" : [ 2016, 2017, 2018 ]
+      },
+      "arrayOfOrganizations" : {
+        "type" : "string",
+        "enum" : [ "Open Connectivity Foundation", "Zigbee Alliance", "OpenFog Consortium", "LORA Alliance", "IoT Consortium", "IoT Security Foundation", "EdgeX Foundry", "IPSO Alliance", "IoT Talent Consortium", "Industrial Internet Consortium", "Z-Wave Alliance", "ULE Alliance", "Linux Foundation", "IMC", "Seo Expert", "IoT World Alliance", "Thread Group", {
+          "IETF" : "Internet Engineering Task Force"
+        }, "oneM2M", "Wireless Power Consortium", "OMA Specworks", "Wireless Broadband Alliance", "Ant+ Alliance", "ETSI", "Bluetooth Alliance", "CABA", "Eclipse IoT Working Group", "Enocean Alliance", "Hypercat Alliance", "OASIS", "Personal Connected Health Alliance", "OPC Foundation", "Open Mobile Alliance", {
+          "I3" : "Intelligent IoT Integrator"
+        }, "Asia Internet Of Things Alliance", {
+          "ISO" : "International Standard Organization"
+        } ]
+      },
+      "arrayOfEcosystems" : {
+        "type" : "string",
+        "enum" : [ "swisscom partners", "Login VSI, Inc.", "ARM mBed", "Ayla Networks", "PTC Marketplace", "IBM", "Microsoft", "Amazon", "EXOSITE", "Microchip", "Intel", "Renesas", "Dell", "swissnex", "Philips Lighting Partners", "Google IoT Partners", "Aeris", "Cypress Semiconductor", "Kepware", "NXP", "Samsung ARTIK Partners", "Si Labs", "Telit", "VMWare", "ST Microelectronics", "Analog Devices Alliance", "Maxim Integrated", "IEEE IoT Working Groups", "Huawei IoT Partners", "Bosch Partners" ]
+      },
+      "useCase" : {
+        "type" : "object",
+        "properties" : {
+          "logo" : {
+            "type" : "string",
+            "example" : "Https://urltologo.jpg"
+          },
+          "title" : {
+            "type" : "string",
+            "example" : "Worksapce Assistants"
+          },
+          "content" : {
+            "type" : "string",
+            "example" : "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+          },
+          "link" : {
+            "type" : "string",
+            "example" : "https://urlToRedirect"
+          }
+        }
+      },
+      "article" : {
+        "type" : "object",
+        "properties" : {
+          "logo" : {
+            "type" : "string",
+            "example" : "url for logo"
+          },
+          "title" : {
+            "type" : "string",
+            "example" : "IEEE SepcturmL In the Age of IoT"
+          },
+          "date" : {
+            "type" : "string",
+            "example" : "2018 December 12"
+          },
+          "description" : {
+            "type" : "string",
+            "example" : "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+          },
+          "link" : {
+            "type" : "string",
+            "example" : "https://linkToArticle.com"
+          },
+          "addToCalendar" : {
+            "type" : "string",
+            "example" : "https://redirect_to_addcalendar"
+          }
+        }
+      },
+      "contact" : {
+        "type" : "object",
+        "properties" : {
+          "firstName" : {
+            "type" : "string",
+            "example" : "David"
+          },
+          "lastName" : {
+            "type" : "string",
+            "example" : "Brown"
+          },
+          "title" : {
+            "type" : "string",
+            "example" : "Marketing Director - Internet of Things"
+          },
+          "email" : {
+            "type" : "object",
+            "properties" : {
+              "workEmail" : {
+                "type" : "string",
+                "example" : "davidbrown@intel.com"
+              }
+            }
+          },
+          "address" : {
+            "$ref" : "#/components/schemas/address"
+          }
+        }
+      },
+      "socialLinks" : {
+        "type" : "object",
+        "properties" : {
+          "twitter" : {
+            "type" : "string",
+            "example" : "https://www.twitter.com/intel"
+          },
+          "facebook" : {
+            "type" : "string",
+            "example" : "https://www.facebook.com/intel"
+          },
+          "linkedin" : {
+            "type" : "string",
+            "example" : "https://www.linkedin.com/intel"
+          },
+          "news" : {
+            "type" : "string",
+            "example" : "https://www.intel.com/news"
+          },
+          "blog" : {
+            "type" : "string",
+            "example" : "https://www.intel.com/blog"
+          }
+        }
+      },
+      "iotTags" : {
+        "type" : "object",
+        "properties" : {
+          "verticals" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            },
+            "example" : [ "smart-city", "retail" ]
+          },
+          "technologies" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            },
+            "example" : [ "aws", "computer vision" ]
+          },
+          "_raw" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            },
+            "example" : [ "raw tag 1", "raw tag 2", "raw tag 3" ]
+          }
+        }
+      },
+      "location" : {
+        "type" : "object",
+        "properties" : {
+          "lat" : {
+            "type" : "number",
+            "example" : 45.9832342345
+          },
+          "lon" : {
+            "type" : "number",
+            "example" : 56.687568
+          }
+        }
+      },
+      "address" : {
+        "type" : "object",
+        "properties" : {
+          "street1" : {
+            "type" : "string",
+            "example" : "225 Amsterdam Ave"
+          },
+          "street2" : {
+            "type" : "string",
+            "example" : "Suite 6"
+          },
+          "city" : {
+            "type" : "string",
+            "example" : "New York"
+          },
+          "state" : {
+            "type" : "string",
+            "example" : "New York"
+          },
+          "stateCode" : {
+            "type" : "string",
+            "example" : "NY"
+          },
+          "country" : {
+            "type" : "string",
+            "example" : "United States of America"
+          },
+          "countryCode" : {
+            "type" : "string",
+            "example" : "USA"
+          },
+          "zipCode" : {
+            "type" : "string",
+            "example" : "10023"
+          },
+          "region" : {
+            "type" : "string",
+            "example" : "Greater New York area"
+          }
+        }
+      },
+      "gridViewData" : {
+        "type" : "object",
+        "properties" : {
+          "searchResults" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/basicInfo"
+            }
+          },
+          "start" : {
+            "type" : "integer",
+            "minimum" : 0,
+            "default" : 0,
+            "example" : 41
+          },
+          "limit" : {
+            "type" : "integer",
+            "minimum" : 0,
+            "maximum" : 50,
+            "default" : 20,
+            "example" : 30
+          },
+          "count" : {
+            "type" : "integer",
+            "description" : "total amount of avaible results found from database",
+            "example" : 128
+          },
+          "useCases" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/useCase"
+            }
+          }
+        }
+      },
+      "search" : {
+        "type" : "object",
+        "properties" : {
+          "q" : {
+            "type" : "string",
+            "example" : "smart-city"
+          },
+          "start" : {
+            "type" : "integer",
+            "example" : 0,
+            "minimum" : 0
+          },
+          "limit" : {
+            "type" : "integer",
+            "example" : 30,
+            "minimum" : 5,
+            "default" : 20
+          }
+        }
+      },
+      "sort" : {
+        "type" : "object",
+        "properties" : {
+          "attribute" : {
+            "type" : "string",
+            "enum" : [ "rank", "name", "relevancy", "activityScore" ]
+          },
+          "how" : {
+            "type" : "string",
+            "enum" : [ "asc", "desc" ]
+          }
+        }
+      },
+      "basicInfo" : {
+        "type" : "object",
+        "properties" : {
+          "type" : {
+            "type" : "string",
+            "example" : "Company"
+          },
+          "name" : {
+            "type" : "string",
+            "example" : "Some Company, LLC"
+          },
+          "id" : {
+            "type" : "string",
+            "example" : "123"
+          },
+          "logo" : {
+            "type" : "string",
+            "example" : "https://iotnation.cloudinary.com/img.gif"
+          },
+          "iotTags" : {
+            "$ref" : "#/components/schemas/iotTags"
+          },
+          "exmployeeCount" : {
+            "type" : "integer"
+          },
+          "rank" : {
+            "type" : "integer",
+            "example" : 100
+          },
+          "rankChange" : {
+            "type" : "integer",
+            "example" : -100
+          },
+          "score" : {
+            "$ref" : "#/components/schemas/score"
+          },
+          "relevance" : {
+            "type" : "integer",
+            "enum" : [ 1, 2, 3, 4, 5 ]
+          },
+          "description" : {
+            "type" : "string",
+            "example" : "Company is built on aws iot space and makes smart cities"
+          }
+        }
+      },
+      "advancedInfo" : {
+        "type" : "object",
+        "properties" : {
+          "companyProfile" : {
+            "allOf" : [ {
+              "$ref" : "#/components/schemas/basicInfo"
+            }, {
+              "type" : "object",
+              "properties" : {
+                "exmployeeCount" : {
+                  "type" : "integer",
+                  "example" : 10035
+                },
+                "url" : {
+                  "type" : "string",
+                  "example" : "https://www.intel.com"
+                },
+                "_name_str" : {
+                  "type" : "string",
+                  "example" : "Some Company, LLC"
+                },
+                "hqLocation" : {
+                  "type" : "string",
+                  "example" : "New York"
+                },
+                "location" : {
+                  "$ref" : "#/components/schemas/location"
+                },
+                "address" : {
+                  "$ref" : "#/components/schemas/address"
+                },
+                "generalLinks" : {
+                  "$ref" : "#/components/schemas/socialLinks"
+                },
+                "iotLinks" : {
+                  "$ref" : "#/components/schemas/socialLinks"
+                }
+              }
+            } ]
+          },
+          "iotIndustryActivity" : {
+            "type" : "object",
+            "properties" : {
+              "iotActivityScore" : {
+                "type" : "object",
+                "properties" : {
+                  "score" : {
+                    "allOf" : [ {
+                      "$ref" : "#/components/schemas/score"
+                    }, {
+                      "type" : "object",
+                      "properties" : {
+                        "change" : {
+                          "type" : "integer",
+                          "example" : -10
+                        },
+                        "from" : {
+                          "type" : "string",
+                          "example" : "q2"
+                        },
+                        "to" : {
+                          "type" : "string",
+                          "example" : "q3"
+                        }
+                      }
+                    } ]
+                  },
+                  "components" : {
+                    "type" : "object",
+                    "properties" : {
+                      "organizations" : {
+                        "type" : "integer",
+                        "example" : 55
+                      },
+                      "conferences" : {
+                        "type" : "integer",
+                        "example" : 35
+                      },
+                      "ecosystems" : {
+                        "type" : "integer",
+                        "example" : 15
+                      }
+                    }
+                  }
+                }
+              },
+              "coeDetails" : {
+                "type" : "object",
+                "properties" : {
+                  "organizations" : {
+                    "type" : "object",
+                    "properties" : {
+                      "total" : {
+                        "type" : "integer",
+                        "example" : 7
+                      },
+                      "list" : {
+                        "type" : "array",
+                        "items" : {
+                          "type" : "object",
+                          "properties" : {
+                            "name" : {
+                              "$ref" : "#/components/schemas/arrayOfOrganizations"
+                            },
+                            "type" : {
+                              "type" : "string",
+                              "example" : "Founding Member"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "conferences" : {
+                    "type" : "object",
+                    "properties" : {
+                      "total" : {
+                        "type" : "integer",
+                        "example" : 4
+                      },
+                      "list" : {
+                        "type" : "array",
+                        "items" : {
+                          "type" : "object",
+                          "properties" : {
+                            "name" : {
+                              "type" : "string",
+                              "example" : "CES"
+                            },
+                            "typeWithYear" : {
+                              "type" : "array",
+                              "items" : {
+                                "type" : "object",
+                                "properties" : {
+                                  "type" : {
+                                    "type" : "string",
+                                    "example" : "Diamond Sponsor"
+                                  },
+                                  "year" : {
+                                    "$ref" : "#/components/schemas/arrayOfYears"
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "ecosystems" : {
+                    "type" : "object",
+                    "properties" : {
+                      "total" : {
+                        "type" : "integer",
+                        "example" : 2
+                      },
+                      "list" : {
+                        "type" : "array",
+                        "items" : {
+                          "type" : "object",
+                          "properties" : {
+                            "name" : {
+                              "$ref" : "#/components/schemas/arrayOfEcosystems"
+                            },
+                            "type" : {
+                              "type" : "string",
+                              "example" : "Silicon Partner"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "useCases" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/useCase"
+            }
+          },
+          "financialData" : {
+            "type" : "object",
+            "properties" : {
+              "stockSymbol" : {
+                "type" : "string",
+                "example" : "NASDAQ:INTC"
+              },
+              "totalFunding" : {
+                "type" : "string",
+                "example" : "$2.5M"
+              },
+              "lastFundingRound" : {
+                "type" : "string",
+                "example" : "Series C"
+              },
+              "publicPrivate" : {
+                "type" : "string",
+                "example" : "Public"
+              },
+              "description" : {
+                "type" : "string",
+                "example" : "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+              }
+            }
+          },
+          "contacts" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/contact"
+            }
+          }
+        }
+      },
+      "filter" : {
+        "type" : "object",
+        "required" : [ "attribute", "operator", "value" ],
+        "properties" : {
+          "attribute" : {
+            "type" : "string",
+            "example" : "name"
+          },
+          "operator" : {
+            "type" : "string",
+            "example" : "contains"
+          },
+          "value" : {
+            "type" : "string",
+            "example" : "IoT"
+          },
+          "attribute2" : {
+            "type" : "string",
+            "example" : "name"
+          },
+          "operator2" : {
+            "type" : "string",
+            "example" : "contains"
+          },
+          "value2" : {
+            "type" : "string",
+            "example" : "IoT"
+          }
+        }
+      },
+      "score" : {
+        "type" : "object",
+        "properties" : {
+          "value" : {
+            "type" : "integer",
+            "example" : 500
+          },
+          "max" : {
+            "type" : "integer",
+            "example" : 1000
+          },
+          "min" : {
+            "type" : "integer",
+            "example" : 0
+          }
+        }
+      }
+    },
+    "securitySchemes" : {
+      "OAuth2" : {
+        "type" : "oauth2",
+        "flows" : {
+          "authorizationCode" : {
+            "authorizationUrl" : "https://example.com/oauth/authorize",
+            "tokenUrl" : "https://example.com/oauth/token",
+            "scopes" : {
+              "read" : "Grants read access",
+              "write" : "Grants write access",
+              "admin" : "Grants access to admin operations"
+            }
+          }
+        }
+      }
+    }
+  }
+}
