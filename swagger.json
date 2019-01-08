@@ -344,6 +344,85 @@
           }
         }
       }
+    },
+    "/coereports/{pageName}" : {
+      "get" : {
+        "summary" : "Get reports for COE member joins and exits",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "pageName",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "example" : "ecosystems"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "body" : {
+                      "type" : "object",
+                      "properties" : {
+                        "data" : {
+                          "type" : "object",
+                          "properties" : {
+                            "title" : {
+                              "type" : "string",
+                              "example" : "Corporte Ecosystem Stats"
+                            },
+                            "subTitle" : {
+                              "type" : "string",
+                              "example" : "Tracking 20 Company Ecosystems with a total of 2580 unique member companies"
+                            },
+                            "dataRange" : {
+                              "type" : "string",
+                              "example" : "10/8/2018 - 10/15/2018"
+                            },
+                            "results" : {
+                              "type" : "array",
+                              "items" : {
+                                "type" : "object",
+                                "properties" : {
+                                  "name" : {
+                                    "type" : "string",
+                                    "example" : "Intel"
+                                  },
+                                  "members" : {
+                                    "type" : "integer",
+                                    "example" : 768
+                                  },
+                                  "weeklyChange" : {
+                                    "type" : "integer",
+                                    "example" : 1
+                                  },
+                                  "membershipsGained" : {
+                                    "$ref" : "#/components/schemas/membershipChange"
+                                  },
+                                  "membershipsLost" : {
+                                    "$ref" : "#/components/schemas/membershipChange"
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid status value"
+          }
+        }
+      }
     }
   },
   "components" : {
@@ -365,6 +444,31 @@
       "arrayOfEcosystems" : {
         "type" : "string",
         "enum" : [ "swisscom partners", "Login VSI, Inc.", "ARM mBed", "Ayla Networks", "PTC Marketplace", "IBM", "Microsoft", "Amazon", "EXOSITE", "Microchip", "Intel", "Renesas", "Dell", "swissnex", "Philips Lighting Partners", "Google IoT Partners", "Aeris", "Cypress Semiconductor", "Kepware", "NXP", "Samsung ARTIK Partners", "Si Labs", "Telit", "VMWare", "ST Microelectronics", "Analog Devices Alliance", "Maxim Integrated", "IEEE IoT Working Groups", "Huawei IoT Partners", "Bosch Partners" ]
+      },
+      "membershipChange" : {
+        "type" : "object",
+        "properties" : {
+          "count" : {
+            "type" : "integer",
+            "example" : 3
+          },
+          "companyies" : {
+            "type" : "array",
+            "items" : {
+              "type" : "object",
+              "properties" : {
+                "name" : {
+                  "type" : "string",
+                  "example" : "intel"
+                },
+                "url" : {
+                  "type" : "string",
+                  "example" : "www.intel.com"
+                }
+              }
+            }
+          }
+        }
       },
       "useCase" : {
         "type" : "object",
